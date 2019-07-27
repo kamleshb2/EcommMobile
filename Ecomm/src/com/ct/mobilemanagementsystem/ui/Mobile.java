@@ -1,4 +1,5 @@
 package com.ct.mobilemanagementsystem.ui;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.ct.mobilemanagementsystem.dao.*;
@@ -11,6 +12,7 @@ public class Mobile {
 	private String description;
 	private float price;
 	static Mobile selectMethod = null;
+	static IMobileService intObj = new MobileServiceImpl();
 	
 	Mobile(int id, String name, String des, float pric){
 		mobId = id;
@@ -74,6 +76,8 @@ public class Mobile {
 	
 	public static void main(String[] args) {
 		
+		while(true) {
+		
 		System.out.println("***Welcome to ABC Mobile Shop***");
 		System.out.println("--------------------------------------");
 		System.out.println("--------------------------------------");
@@ -92,21 +96,37 @@ public class Mobile {
 		{	
 		case 1:
 			System.out.println("Enter Mobile Id, Brand Name, Description and Price");
+			try {
 			int a = scn.nextInt();
 			String b = scn.next();
 			String c = scn.next();
 			int d = scn.nextInt();
 			
 			selectMethod.addMobile(a, b, c, d);
+			}catch(InputMismatchException e) {
+				System.out.println("Input must be in the specified format");
+			}
 			break;
 		case 2:
-//			Mobile searchResult = selectMethod.searchMobile();
+			System.out.println("Enter Mobile ID to be searched");
+			try {
+			int id = scn.nextInt();
+			selectMethod.searchMobile(id);
+			}catch(InputMismatchException e) {
+				System.out.println("Input must be integer!!!");
+			}
 			break;
 		case 3:
 			selectMethod.displayMobile();
 			break;
 		case 4:
-			selectMethod.deleteMobile();
+			System.out.println("Enter Mobile ID to be deleted");
+			try {
+			int mId = scn.nextInt();
+			selectMethod.deleteMobile(mId);
+			}catch(InputMismatchException e) {
+				System.out.println("Input must be integer!!!");
+			}
 			break;	
 		case 5:
 			System.out.println("Thank you!");
@@ -114,28 +134,26 @@ public class Mobile {
 		}
 		
 	}
+	}
 	
 	public void addMobile(int id, String name, String des, int price) {
 		
 		Mobile newMob = new Mobile(id, name, des, price);
-		IMobileService intObj = null;
-		intObj = new MobileServiceImpl();
 		intObj.addMobile(newMob);
 		
-		
 	}
 	
-//	public Mobile searchMobile() {
-//		
-//		
-//	}
+	public void searchMobile(int id) {
+		
+		intObj.searchMobileById(id);
+	}
 	
 	public void displayMobile() {
-		
+		intObj.displayAllMobiles();
 	}
 	
-	public void deleteMobile() {
-		
+	public void deleteMobile(int mId) {
+		intObj.deleteMobile(mId);
 	}
 
 }

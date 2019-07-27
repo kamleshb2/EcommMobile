@@ -8,6 +8,7 @@ import com.ct.mobilemanagementsystem.dao.MobileDAOImpl;
 import com.ct.mobilemanagementsystem.ui.Mobile;
 
 public class MobileServiceImpl implements IMobileService{
+	static IMobileDAO iObj =  new MobileDAOImpl();  //new MobileDAOImpl();
 
 	@Override
 	public void addMobile(Mobile m) {
@@ -22,25 +23,34 @@ public class MobileServiceImpl implements IMobileService{
 		stringList.add("Apple");
 		stringList.add("Huawei");
 		stringList.add("LG");
-		boolean idCheck = true;
+		boolean idCheck = false;
 		boolean nameCheck = false;
 		int mobId = m.getMobId();
 		String bName = m.getBrandName();
 		String id = "" + mobId;
-		if(id.length() <7 && id.length() > 9 ) {
+		
+		boolean retValue = iObj.containsId(mobId);
+		
+		if((id.length()==8) ) {
 			idCheck = true;
 		}
 		if(stringList.contains(bName)) {
 			nameCheck = true;
 		}
 		
-		if(idCheck && nameCheck) {
-			IMobileDAO iObj = null;
-			iObj = new MobileDAOImpl();
+		if(idCheck && nameCheck && retValue == false) {
 			iObj.addMobile(m);
 		}
 		else {
-			System.out.println("Either ID or Brand Name is invalid");
+			if(idCheck == false) {
+			System.out.println("ID is invalid");
+		}
+			if(nameCheck == false) {
+				System.out.println("Brand Name is invalid");
+			}
+			if(retValue) {
+				System.out.println("Given ID already exists!!");
+			}
 		}
 		
 		
@@ -49,18 +59,39 @@ public class MobileServiceImpl implements IMobileService{
 	@Override
 	public void deleteMobile(int mId) {
 		// TODO Auto-generated method stub
+		try {
+		boolean result = iObj.deleteMobile(mId);
+		if(result) {
+			System.out.println("Mobile successfully removed from the database");
+		}
+		else {
+			System.out.println("Given mobile ID doesn't exist!!!");
+		}
+		}
+		catch(NullPointerException e) {
+			System.out.println("Given ID doesn't exists!!!");
+		}
 		
 	}
 
 	@Override
-	public void updateMobileDetails(int mId) {
+	public void displayAllMobiles() {
 		// TODO Auto-generated method stub
+		iObj.displayAllMobiles();
 		
 	}
 
 	@Override
 	public void searchMobileById(int mId) {
 		// TODO Auto-generated method stub
+		
+		try {
+		Mobile m = iObj.searchMobileById(mId);
+		System.out.println("" + m.getMobId() + " " + m.getBrandName() + " " + m.getDescription() + " " + m.getPrice());
+		}
+		catch(Exception e) {
+			System.out.println("Given ID doesn't exists!!!");
+		}
 		
 	}
 	
