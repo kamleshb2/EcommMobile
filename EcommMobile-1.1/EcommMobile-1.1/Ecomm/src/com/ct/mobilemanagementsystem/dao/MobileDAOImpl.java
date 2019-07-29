@@ -8,17 +8,17 @@ public class MobileDAOImpl implements IMobileDAO {
 	
 	static ArrayList<Mobile> objectList = new ArrayList<Mobile>();
 	
-	public void displayMobiles() {
-		for(Mobile l: objectList) {
-			System.out.println("" + l.getMobId() + " " + l.getBrandName() + " " + l.getDescription() + " " + l.getPrice());
-		}
-	}
+//	public void displayMobiles() {
+//		for(Mobile l: objectList) {
+//			System.out.println("" + l.getMobId() + " " + l.getBrandName() + " " + l.getDescription() + " " + l.getPrice());
+//		}
+//	}
 
 	@Override
 	public void addMobile(Mobile m) {
 		// TODO Auto-generated method stub
 		objectList.add(m);
-		displayMobiles();
+//		displayMobiles();
 	}
 
 	@Override
@@ -39,11 +39,9 @@ public class MobileDAOImpl implements IMobileDAO {
 	}
 
 	@Override
-	public void displayAllMobiles() {
+	public ArrayList<Mobile> displayAllMobiles() {
 		// TODO Auto-generated method stub
-		for(Mobile l: objectList) {
-			System.out.println("" + l.getMobId() + " " + l.getBrandName() + " " + l.getDescription() + " " + l.getPrice());
-		}
+		return objectList;
 		
 	}
 

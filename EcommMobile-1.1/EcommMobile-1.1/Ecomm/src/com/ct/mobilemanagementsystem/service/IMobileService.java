@@ -7,9 +7,9 @@ import com.ct.mobilemanagementsystem.ui.Mobile;
 
 public interface IMobileService {
 	
-	public List addMobile(Mobile m);
-	public void deleteMobile(int mId);
-	public void displayAllMobiles();
+	public ArrayList<String> addMobile(Mobile m);
+	public boolean deleteMobile(int mId);
+	public ArrayList displayAllMobiles();
 	public Mobile searchMobileById(int mId);
 	
 

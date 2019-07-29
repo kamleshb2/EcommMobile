@@ -1,6 +1,7 @@
 package com.ct.mobilemanagementsystem.service;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 import com.ct.mobilemanagementsystem.dao.IMobileDAO;
@@ -11,7 +12,7 @@ public class MobileServiceImpl implements IMobileService {
 	static IMobileDAO iObj = new MobileDAOImpl(); // new MobileDAOImpl();
 
 	@Override
-	public List addMobile(Mobile m) {
+	public ArrayList<String> addMobile(Mobile m) {
 		// TODO Auto-generated method stub
 		List stringList = new ArrayList();
 		stringList.add("Nokia");
@@ -26,7 +27,7 @@ public class MobileServiceImpl implements IMobileService {
 		
 		//list to store status messages
 		
-		List<String> messageList = new ArrayList<String>();
+		ArrayList<String> messageList = new ArrayList<String>();
 		boolean idCheck = false;
 		boolean nameCheck = false;
 		int mobId = m.getMobId();
@@ -66,37 +67,27 @@ public class MobileServiceImpl implements IMobileService {
 	}
 
 	@Override
-	public void deleteMobile(int mId) {
+	public boolean deleteMobile(int mId) throws NullPointerException {
 		// TODO Auto-generated method stub
-		try {
 			boolean result = iObj.deleteMobile(mId);
-			if (result) {
-				System.out.println("Mobile successfully removed from the database");
-			} else {
-				System.out.println("Given mobile ID doesn't exist!!!");
-			}
-		} catch (NullPointerException e) {
-			System.out.println("Given ID doesn't exists!!!");
-		}
-
+			
+		return result;
 	}
 
 	@Override
-	public void displayAllMobiles() {
+	public ArrayList<Mobile> displayAllMobiles() {
 		// TODO Auto-generated method stub
-		iObj.displayAllMobiles();
+		ArrayList<Mobile> l = iObj.displayAllMobiles();
+		return l;
 
 	}
 
 	@Override
-	public Mobile searchMobileById(int mId) {
+	public Mobile searchMobileById(int mId) throws NullPointerException {
 		// TODO Auto-generated method stub
 
 			Mobile m = null;
-			try {
-			iObj.searchMobileById(mId);
-			}catch(NullPointerException e) {
-			}
+			m = iObj.searchMobileById(mId);
 			return m;
 
 	}

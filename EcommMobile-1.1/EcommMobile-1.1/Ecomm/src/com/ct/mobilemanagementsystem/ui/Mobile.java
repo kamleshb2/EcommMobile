@@ -1,4 +1,5 @@
 package com.ct.mobilemanagementsystem.ui;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -100,10 +101,12 @@ public class Mobile {
 			try {
 			int a = scn.nextInt();
 			String b = scn.next();
-			String c = scn.next();
+			scn.nextLine();
+			String c = scn.nextLine();
 			int d = scn.nextInt();
 			
-			selectMethod.addMobile(a, b, c, d);
+			ArrayList<String> finalList = selectMethod.addMobile(a, b, c, d);
+			System.out.println(finalList);
 			}catch(InputMismatchException e) {
 				System.out.println("Input must be in the specified format");
 			}
@@ -112,23 +115,41 @@ public class Mobile {
 			System.out.println("Enter Mobile ID to be searched");
 			try {
 			int id = scn.nextInt();
-			selectMethod.searchMobile(id);
-			}catch(InputMismatchException e) {
+			Mobile m;
+			m = selectMethod.searchMobile(id);
+			System.out.println("" + m.getMobId() + " " + m.getBrandName() + " " + m.getDescription() + " " + m.getPrice());
+			}catch(InputMismatchException | NullPointerException e) {
+				if(e instanceof InputMismatchException) {
 				System.out.println("Input must be integer!!!");
+				}
+				else {
+					System.out.println("Given ID doesn't exists!!");
+				}
 			}
 			break;
 		case 3:
-			selectMethod.displayMobile();
+			ArrayList<Mobile> l = selectMethod.displayMobile();
+			for(Mobile m: l) {
+				System.out.println("" + m.getMobId() + " " + m.getBrandName() + " " + m.getDescription() + " " + m.getPrice());
+			}
 			break;
 		case 4:
-			System.out.println("Enter Mobile ID to be deleted");
-			try {
-			int mId = scn.nextInt();
-			selectMethod.deleteMobile(mId);
-			}catch(InputMismatchException e) {
-				System.out.println("Input must be integer!!!");
-			}
-			break;	
+				System.out.println("Enter Mobile ID to be deleted");
+				int mId = scn.nextInt();
+				boolean result = false;
+				try {
+					result = selectMethod.deleteMobile(mId);
+					if (result) {
+						System.out.println("Mobile successfully removed from the database");
+					} else {
+						System.out.println("Given mobile ID doesn't exist!!!");
+					}
+				} catch (NullPointerException e) {
+					System.out.println("Given ID doesn't exists!!!");
+				} catch (InputMismatchException e) {
+					System.out.println("Input must be integer!!!");
+				}
+				break;
 		case 5:
 			System.out.println("Thank you!");
 		
@@ -137,29 +158,29 @@ public class Mobile {
 	}
 	}
 	
-	public void addMobile(int id, String name, String des, int price) {
+	public ArrayList addMobile(int id, String name, String des, int price) {
 		
 		Mobile newMob = new Mobile(id, name, des, price);
-		List l = intObj.addMobile(newMob);
-			System.out.println(" " + l);
+		ArrayList<String> l = intObj.addMobile(newMob);
+		return l; // to print status messages 
 		
 		
 	}
 	
-	public void searchMobile(int id) {
-		try {
+	public Mobile searchMobile(int id) throws NullPointerException {
 		Mobile m = intObj.searchMobileById(id);
-		}catch(NullPointerException e) {
-			System.out.println("Given ID doesn't exist!!");
-		}
+		return m;
+		
 	}
 	
-	public void displayMobile() {
-		intObj.displayAllMobiles();
+	public ArrayList<Mobile> displayMobile() {
+		ArrayList<Mobile> l= intObj.displayAllMobiles();
+		return l;
 	}
 	
-	public void deleteMobile(int mId) {
-		intObj.deleteMobile(mId);
+	public boolean deleteMobile(int mId) {
+		boolean result = intObj.deleteMobile(mId);
+		return result;
 	}
 
 }
